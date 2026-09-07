@@ -19,6 +19,11 @@ public class PlayerMovement : MonoBehaviour
 
     public Camera pCamera;
 
+    [SerializeField] private float rayDistance = 3.0f;
+    private RaycastHit hit;
+    private bool hasHit;
+    public GameObject wall;
+
     private void OnEnable()
     {
         moveAction.Enable();
@@ -49,6 +54,8 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = new Vector3(moveAction.ReadValue<Vector2>().normalized.x, moveDirection.y, moveAction.ReadValue<Vector2>().normalized.y);
         lookDirection = new Vector3(-lookAction.ReadValue<Vector2>().y, lookAction.ReadValue<Vector2>().x, lookDirection.z);
         //Debug.Log(moveDirection);
+
+
     }
     private void FixedUpdate()
     {
@@ -60,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 movement = (transform.forward * moveDirection.z) + (transform.right * moveDirection.x);
         rb.MovePosition(rb.position + currentSpeed * Time.fixedDeltaTime * movement.normalized);
 
-        Debug.Log(rb.position + currentSpeed * Time.fixedDeltaTime * movement.normalized);
+        //Debug.Log(rb.position + currentSpeed * Time.fixedDeltaTime * movement.normalized);
     }
 
     private void Look()
@@ -70,5 +77,7 @@ public class PlayerMovement : MonoBehaviour
         pitch = Mathf.Clamp(pitch, -90f, 90f);
         transform.rotation = Quaternion.Euler(0f, yaw, 0f);
         pCamera.transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
+
+        hasHit = Physics.Raycast(pCamera.transform.position, pCamera.transform.forward, out hit, rayDistance);
     }
 }
