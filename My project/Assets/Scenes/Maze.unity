@@ -510,7 +510,7 @@ GameObject:
   - component: {fileID: 895565467}
   - component: {fileID: 895565466}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1008,7 +1008,11 @@ PrefabInstance:
     - target: {fileID: 2560284701078673882, guid: 621e743b35fdc0b4ba6caa02c476d504, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 628275053}
+    - target: {fileID: 2560284701078673882, guid: 621e743b35fdc0b4ba6caa02c476d504, type: 3}
+      propertyPath: navSurface
+      value: 
+      objectReference: {fileID: 1126424645}
     - target: {fileID: 6086330788147176499, guid: 621e743b35fdc0b4ba6caa02c476d504, type: 3}
       propertyPath: m_Name
       value: Enemy
