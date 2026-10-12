@@ -16,6 +16,11 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField]
     private int _mazeDepth;
 
+    [SerializeField]
+    private float _cellSize = 1f;
+
+    private bool entranceMade = false;
+
     private MazeCell[,] _mazeGrid;
 
     void Start()
@@ -24,13 +29,22 @@ public class MazeGenerator : MonoBehaviour
 
         for (int x = 0; x < _mazeWidth; x++)
         {
+            // if x == 0 || x == _mazeWidth - 1, then it's the edge
+            // if z == 0 || z == _MazeDepth - 1, then it's also the edge
             for (int z = 0; z < _mazeDepth; z++)
             {
-                _mazeGrid[x, z] = Instantiate(_mazeCellPrefab, new Vector3(x, 0, z), Quaternion.identity);
+                Vector3 position = new Vector3(x * _cellSize, 0, z * _cellSize);
+                _mazeGrid[x, z] = Instantiate(_mazeCellPrefab, position, Quaternion.identity);
             }
         }
 
         GenerateMaze(null, _mazeGrid[0, 0]);
+        
+        if (!entranceMade)
+        {
+            _mazeGrid[0, 0].ClearLeftWall();
+            entranceMade = true;
+        }
     }
 
     private void GenerateMaze(MazeCell previousCell, MazeCell currentCell)
@@ -60,8 +74,8 @@ public class MazeGenerator : MonoBehaviour
 
     private IEnumerable<MazeCell> GetUnvisitedCells(MazeCell currentCell)
     {
-        int x = (int)currentCell.transform.position.x;
-        int z = (int)currentCell.transform.position.z;
+        int x = Mathf.RoundToInt(currentCell.transform.position.x / _cellSize);
+        int z = Mathf.RoundToInt(currentCell.transform.position.z / _cellSize);
 
         if (x + 1 < _mazeWidth)
         {
