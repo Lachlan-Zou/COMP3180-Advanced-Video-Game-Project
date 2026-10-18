@@ -679,8 +679,12 @@ PrefabInstance:
       value: 1.6
       objectReference: {fileID: 0}
     - target: {fileID: 1938573856346195490, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
+      propertyPath: _mazeDepth
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1938573856346195490, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
       propertyPath: _mazeWidth
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4047258455622427132, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -749,7 +753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
       propertyPath: m_LocalRotation.w

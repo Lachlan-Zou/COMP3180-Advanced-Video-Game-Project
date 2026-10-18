@@ -31,6 +31,14 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
+        switch (currentState)
+        {
+            case State.Search:
+                agent.SetDestination(new Vector3((mazeGenerator._mazeWidth - 1) * mazeGenerator._cellSize, 0, (mazeGenerator._mazeDepth - 1) * mazeGenerator._cellSize));
+                break;
+            case State.Chase:
+                break;
+        }
         //Debug.Log(target.transform.position);
         // if (NavMesh.SamplePosition(target.transform.position, out NavMeshHit hit, range, NavMesh.AllAreas))
         // {
@@ -56,7 +64,7 @@ public class EnemyMovement : MonoBehaviour
         //         Debug.Log($"Waypoint {i}: {pathWaypoints[i]}");
         //     }
         // }
-        Debug.Log((mazeGenerator._mazeDepth - 1) * mazeGenerator._cellSize);
+        //Debug.Log((mazeGenerator._mazeDepth - 1) * mazeGenerator._cellSize);
     }
 
     void RebuildNavMesh()
@@ -64,31 +72,3 @@ public class EnemyMovement : MonoBehaviour
         navSurface.BuildNavMesh();
     }
 }
-// ShowGoldenPath
-// using UnityEngine;
-// using UnityEngine.AI;
-
-// public class ShowGoldenPath : MonoBehaviour
-// {
-//     public Transform target;
-//     private NavMeshPath path;
-//     private float elapsed = 0.0f;
-//     void Start()
-//     {
-//         path = new NavMeshPath();
-//         elapsed = 0.0f;
-//     }
-
-//     void Update()
-//     {
-//         // Update the way to the goal every second.
-//         elapsed += Time.deltaTime;
-//         if (elapsed > 1.0f)
-//         {
-//             elapsed -= 1.0f;
-//             NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
-//         }
-//         for (int i = 0; i < path.corners.Length - 1; i++)
-//             Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
-//     }
-// }
