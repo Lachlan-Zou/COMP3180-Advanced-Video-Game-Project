@@ -263,3 +263,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393a9009f596ca04da2f62e6119272fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  mazeGenerator: {fileID: 1938573856346195490, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
+  range: 10

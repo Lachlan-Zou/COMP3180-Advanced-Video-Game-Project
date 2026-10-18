@@ -7,23 +7,13 @@ using UnityEngine;
 
 public class MazeGenerator : MonoBehaviour
 {
-    [SerializeField]
-    private MazeCell _mazeCellPrefab;
-
-    [SerializeField]
-    private int _mazeWidth;
-
-    [SerializeField]
-    private int _mazeDepth;
-
-    [SerializeField]
-    private float _cellSize = 1f;
-
-    private bool entranceMade = false;
-
+    [SerializeField]private MazeCell _mazeCellPrefab;
+    public int _mazeWidth;
+    public int _mazeDepth;
+    public float _cellSize;
     private MazeCell[,] _mazeGrid;
 
-    void Start()
+    void Awake()
     {
         _mazeGrid = new MazeCell[_mazeWidth, _mazeDepth];
 
@@ -37,14 +27,7 @@ public class MazeGenerator : MonoBehaviour
                 _mazeGrid[x, z] = Instantiate(_mazeCellPrefab, position, Quaternion.identity);
             }
         }
-
         GenerateMaze(null, _mazeGrid[0, 0]);
-        
-        if (!entranceMade)
-        {
-            _mazeGrid[0, 0].ClearLeftWall();
-            entranceMade = true;
-        }
     }
 
     private void GenerateMaze(MazeCell previousCell, MazeCell currentCell)
