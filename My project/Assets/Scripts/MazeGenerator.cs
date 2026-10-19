@@ -25,12 +25,12 @@ public class MazeGenerator : MonoBehaviour
             for (int z = 0; z < _mazeDepth; z++)
             {
                 Vector3 position = new Vector3(x * _cellSize, 0, z * _cellSize);
-                _mazeGrid[x, z] = Instantiate(_mazeCellPrefab, position, Quaternion.identity);
+                //_mazeGrid[x, z] = Instantiate(_mazeCellPrefab, position, Quaternion.identity);
             }
         }
-        GenerateMaze(null, _mazeGrid[0, 0]);
+        //GenerateMaze(null, _mazeGrid[0, 0]);
         
-        target.transform.position = new Vector3((_mazeWidth - 1)/2 * _cellSize, 0, 
+        target.transform.position = new Vector3((_mazeWidth - 1)/2 * _cellSize, 1, 
                                                 (_mazeDepth - 1)/2 * _cellSize);
     }
 

@@ -9,7 +9,12 @@ public class EnemyMovement : MonoBehaviour
     private NavMeshAgent agent;
     private NavMeshSurface navSurface;
     public MazeGenerator mazeGenerator;
-    private Vector3 randomPoint;
+    private NavMeshHit hit;
+    private float mazeDepth;
+    private float mazeWidth;
+    private float cellSize;
+    private Vector3 pointofInterest;
+    private Vector3 searchPoint;
     
     [SerializeField] private float range = 5.0f;
     private enum State
@@ -29,8 +34,13 @@ public class EnemyMovement : MonoBehaviour
         target = GameObject.Find("Target");
 
         mazeGenerator = GameObject.Find("Maze Generator").GetComponent<MazeGenerator>();
+        mazeDepth = mazeGenerator._mazeDepth;
+        mazeWidth = mazeGenerator._mazeWidth;
+        cellSize = mazeGenerator._cellSize;
 
         agent.updateRotation = true;
+
+        searchPoint = new Vector3((mazeWidth - 1) * cellSize, 0, (mazeDepth - 1) * cellSize);
     }
 
     void Update()
@@ -38,65 +48,66 @@ public class EnemyMovement : MonoBehaviour
         switch (currentState)
         {
             case State.Search:
-                agent.SetDestination(new Vector3((mazeGenerator._mazeWidth - 1) * mazeGenerator._cellSize, 0, (mazeGenerator._mazeDepth - 1) * mazeGenerator._cellSize));
-                if (Vector3.Distance(transform.position, target.transform.position) < range)
+                agent.SetDestination(searchPoint);
+                GetComponent<NavMeshAgent>().speed = 3.5f;
+                if (agent.remainingDistance < 1f)
                 {
-                    currentState = State.Suspicion;
-
-                    randomPoint = GenerateRandomPoint();
-
-                    randomPoint.y = transform.position.y;
-
-                    agent.SetDestination(randomPoint);
+                    Vector3 point = GenerateRandomPoint();
+                    if (point == searchPoint)
+                    {
+                        point = GenerateRandomPoint();
+                    }
+                    else
+                    {
+                        searchPoint = point;
+                    }
                 }
+
+                if (!NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas))
+                {
+                    currentState = State.Chase;
+                }
+
+                // if (Vector3.Distance(transform.position, target.transform.position) < range)
+                // {
+                //     currentState = State.Suspicion;
+
+                //     randomPoint = GenerateRandomPoint();
+
+                //     randomPoint.y = transform.position.y;
+
+                //     agent.SetDestination(randomPoint);
+                // }
                 break;
-            case State.Suspicion: 
-                Debug.Log(randomPoint);
-                GetComponent<NavMeshAgent>().speed = 1.5f;
+            case State.Suspicion:
+                agent.SetDestination(pointofInterest);
+                
+                if (!NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas))
+                {
+                    currentState = State.Chase;
+                }
+                if (agent.remainingDistance < 1f)
+                {
+                    if (NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas))
+                    {
+                        currentState = State.Search;
+                    }
+                }
                 break;
             case State.Chase:
                 agent.SetDestination(target.transform.position);
                 GetComponent<NavMeshAgent>().speed = 5f;
+                if (NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas))
+                {
+                    pointofInterest = target.transform.position;
+                    currentState = State.Suspicion;
+                }
                 break;
         }
-
-        Debug.DrawRay(transform.position, transform.forward * range, Color.red);
-        RaycastHit hit;
-
-        if (Physics.Raycast(transform.position, transform.forward, out hit, range))
-        {
-            if (hit.collider.CompareTag("Target"))
-            {
-                currentState = State.Chase;
-            }
-        }
-        
-        //Debug.Log(target.transform.position);
-        // if (NavMesh.SamplePosition(target.transform.position, out NavMeshHit hit, range, NavMesh.AllAreas))
-        // {
-        //     //Debug.Log("Found NavMesh at: " + hit.position);
-        //     Debug.DrawRay(targetTransform.position, Vector3.up, Color.blue, 1.0f);
-        // }
-        // else
-        // {
-        //     //Debug.Log("No NavMesh found nearby.");
-        // }
-        // if (target != null)
-        // {
-        //     agent.SetDestination(targetTransform.position);
-        // }
-        //  if (agent.hasPath)
-        // {
-        //     // Vector3[] array containing all upcoming path corners (waypoints)
-        //     Vector3[] pathWaypoints = agent.path.corners;
-
-        //     // Example: Loop through and print them or draw lines
-        //     for (int i = 0; i < pathWaypoints.Length; i++)
-        //     {
-        //         Debug.Log($"Waypoint {i}: {pathWaypoints[i]}");
-        //     }
-        // }
-        //Debug.Log((mazeGenerator._mazeDepth - 1) * mazeGenerator._cellSize);
+        bool blocked = false;
+        blocked = NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas);
+        Debug.DrawLine(transform.position, target.transform.position, blocked ? Color.red : Color.green);
+        Debug.Log(currentState);
     }
 
     void RebuildNavMesh()
@@ -107,7 +118,9 @@ public class EnemyMovement : MonoBehaviour
     public Vector3 GenerateRandomPoint()
     {
         NavMeshPath path = new NavMeshPath();
-        randomPoint = target.transform.position + (Random.insideUnitSphere * 3f);
+        float randomX = Random.Range(0f, (mazeDepth - 1) * cellSize);
+        float randomZ = Random.Range(0f, (mazeWidth - 1) * cellSize);
+        Vector3 randomPoint = new Vector3(randomX, 0, randomZ);
 
         if (NavMesh.CalculatePath(transform.position, randomPoint, NavMesh.AllAreas, path) && path.status == NavMeshPathStatus.PathComplete)
         {

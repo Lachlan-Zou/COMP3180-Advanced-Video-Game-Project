@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,14 +8,11 @@ public class PlayerMovement : MonoBehaviour
     private InputAction moveAction;
     private InputAction lookAction;
     private InputAction placeAction;
+    private InputAction removeAction;
 
     private Vector3 moveDirection = Vector3.zero;
     public Rigidbody rb; // set on awake
     public float currentSpeed = 2.0f;
-
-    [SerializeField] private float rayDistance = 3.0f;
-    private RaycastHit hit;
-    private bool hasHit;
     public GameObject wall;
 
     private void OnEnable()
@@ -38,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
         lookAction = inputActions.Player.Look;
         placeAction = inputActions.Player.Place;
 
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
@@ -59,5 +57,9 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log(rb.position + currentSpeed * Time.fixedDeltaTime * movement.normalized);
     }
 
-
+    private void Place()
+    {
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        Instantiate(wall, new Vector3(mousePos.x, 0, mousePos.y), Quaternion.identity);
+    }
 }
