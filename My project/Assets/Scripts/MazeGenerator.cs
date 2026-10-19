@@ -7,7 +7,8 @@ using UnityEngine;
 
 public class MazeGenerator : MonoBehaviour
 {
-    [SerializeField]private MazeCell _mazeCellPrefab;
+    [SerializeField] private GameObject target;
+    [SerializeField] private MazeCell _mazeCellPrefab;
     public int _mazeWidth;
     public int _mazeDepth;
     public float _cellSize;
@@ -28,6 +29,9 @@ public class MazeGenerator : MonoBehaviour
             }
         }
         GenerateMaze(null, _mazeGrid[0, 0]);
+        
+        target.transform.position = new Vector3((_mazeWidth - 1)/2 * _cellSize, 0, 
+                                                (_mazeDepth - 1)/2 * _cellSize);
     }
 
     private void GenerateMaze(MazeCell previousCell, MazeCell currentCell)
