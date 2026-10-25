@@ -15,6 +15,7 @@ public class EnemyMovement : MonoBehaviour
     private float cellSize;
     private Vector3 pointofInterest;
     private Vector3 searchPoint;
+    public EnemySight enemySight;
     
     [SerializeField] private float range = 5.0f;
     private enum State
@@ -106,8 +107,8 @@ public class EnemyMovement : MonoBehaviour
         }
         bool blocked = false;
         blocked = NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas);
-        Debug.DrawLine(transform.position, target.transform.position, blocked ? Color.red : Color.green);
-        Debug.Log(currentState);
+        //Debug.DrawLine(transform.position, target.transform.position, blocked ? Color.red : Color.green);
+        //Debug.Log(currentState);
     }
 
     void RebuildNavMesh()
