@@ -2,6 +2,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.AI.Navigation;
+using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -100,8 +101,8 @@ public class PlayerMovement : MonoBehaviour
         if (removeAction.WasPressedThisFrame() && placable == 0)
         {
             Remove();
-        //  navSurface.BuildNavMesh();
         }
+        
 
     }
     private void FixedUpdate()
@@ -135,10 +136,39 @@ public class PlayerMovement : MonoBehaviour
 
     private void Remove()
     {
-        wall.SetActive(false);
-        navSurface.BuildNavMesh();
         placable = 1;
         wallSill.SetActive(true);
-        Destroy(wallInstance);
+
+        GameObject removedWall = wallInstance;
+
+        Debug.Log($"removing wall: {removedWall.name}");
+        Debug.Log($"NavmeshSurface exists: {navSurface != null}");
+
+        wall.SetActive(false);
+
+        Debug.Log(
+            $"wall active? {wallInstance.activeInHierarchy}" 
+            
+           );
+
+        navSurface.BuildNavMesh();
+
+        Debug.Log("navmesh made");
+
+        Destroy(removedWall);
+
+        StartCoroutine(RemoveWall(wallInstance));
+    }
+
+    private IEnumerator RemoveWall(GameObject wall)
+    {
+        
+
+        yield return new WaitForEndOfFrame();
+
+        navSurface.BuildNavMesh();
+        Debug.Log("Navmesh built");
+
+        Destroy(wall);
     }
 }

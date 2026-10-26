@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 5772422636941772272}
   - component: {fileID: 2560284701078673882}
   - component: {fileID: 135441464607904737}
+  - component: {fileID: -4928749420122755081}
   m_Layer: 3
   m_Name: Enemy
   m_TagString: Untagged
@@ -279,9 +280,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3809851f88a772a4881a173a187d8fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySight
+  coneMaterial: {fileID: 0}
   target: {fileID: 2844191154158927333, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
   viewDistance: 10
   viewAngle: 90
+  radius: 10
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 8
   wallMask:
     serializedVersion: 2
     m_Bits: 64
+  canSeePlayer: 0
+--- !u!114 &-4928749420122755081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6086330788147176499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6aa44ec71c1db34bb7248d8627b8510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FieldofView
+  radius: 0
+  angle: 0
+  playerRef: {fileID: 2844191154158927333, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 8
+  obstructionMask:
+    serializedVersion: 2
+    m_Bits: 64
+  canSeePlayer: 0

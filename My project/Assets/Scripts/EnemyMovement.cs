@@ -72,16 +72,16 @@ public class EnemyMovement : MonoBehaviour
                     currentState = State.Chase;
                 }
 
-                // if (Vector3.Distance(transform.position, target.transform.position) < range)
-                // {
-                //     currentState = State.Suspicion;
+                //if (Vector3.Distance(transform.position, target.transform.position) < range)
+                //{
+                //    currentState = State.Suspicion;
 
-                //     randomPoint = GenerateRandomPoint();
+                //    randomPoint = GenerateRandomPoint();
 
-                //     randomPoint.y = transform.position.y;
+                //    randomPoint.y = transform.position.y;
 
-                //     agent.SetDestination(randomPoint);
-                // }
+                //    agent.SetDestination(randomPoint);
+                //}
                 break;
             case State.Suspicion:
                 agent.SetDestination(pointofInterest);
@@ -101,17 +101,27 @@ public class EnemyMovement : MonoBehaviour
             case State.Chase:
                 agent.SetDestination(target.transform.position);
                 GetComponent<NavMeshAgent>().speed = 5f;
-                if (NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas))
+                if (!enemySight.canSeePlayer)
                 {
                     pointofInterest = target.transform.position;
                     currentState = State.Suspicion;
                 }
+                
                 break;
         }
         bool blocked = false;
         blocked = NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas);
         //Debug.DrawLine(transform.position, target.transform.position, blocked ? Color.red : Color.green);
         //Debug.Log(currentState);
+
+        if (enemySight.canSeePlayer)
+        {
+            currentState = State.Chase;
+        }
+   //     Debug.Log(currentState);
+        //  Debug.Log(enemySight.canSeePlayer);
+
+        enemySight.CanSeeTarget();
     }
 
     public void RebuildNavMesh()
