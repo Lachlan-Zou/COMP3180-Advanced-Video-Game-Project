@@ -25,12 +25,15 @@ public class EnemyMovement : MonoBehaviour
         Chase,
     }
     private State currentState = State.Search;
+    void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        navSurface = FindFirstObjectByType<NavMeshSurface>();
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // Get the NavMeshAgent component attached to this GameObject
-        agent = GetComponent<NavMeshAgent>();
-        navSurface = FindFirstObjectByType<NavMeshSurface>();
+
         RebuildNavMesh();
         target = GameObject.Find("Target");
 
@@ -111,7 +114,7 @@ public class EnemyMovement : MonoBehaviour
         //Debug.Log(currentState);
     }
 
-    void RebuildNavMesh()
+    public void RebuildNavMesh()
     {
         navSurface.BuildNavMesh();
     }
@@ -128,5 +131,12 @@ public class EnemyMovement : MonoBehaviour
             return randomPoint;
         } 
         return GenerateRandomPoint();
+    }
+
+    public void InvestigatePoint(Vector3 position)
+    {
+        Debug.Log(position);
+        currentState = State.Suspicion;
+        pointofInterest = position;
     }
 }

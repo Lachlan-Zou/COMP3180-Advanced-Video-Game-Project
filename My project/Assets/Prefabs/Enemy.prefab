@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5204533799373561066}
   - component: {fileID: 5226568367475393129}
   - component: {fileID: 51478934888821921}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,8 @@ GameObject:
   - component: {fileID: 6770762227416905903}
   - component: {fileID: 5772422636941772272}
   - component: {fileID: 2560284701078673882}
-  m_Layer: 0
+  - component: {fileID: 135441464607904737}
+  m_Layer: 3
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,4 +265,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
   mazeGenerator: {fileID: 1938573856346195490, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
+  enemySight: {fileID: 135441464607904737}
   range: 10
+--- !u!114 &135441464607904737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6086330788147176499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3809851f88a772a4881a173a187d8fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySight
+  target: {fileID: 2844191154158927333, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
+  viewDistance: 10
+  viewAngle: 90
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 64

@@ -1,6 +1,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.AI.Navigation;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private InputAction placeAction;
     private InputAction removeAction;
 
+    [SerializeField] private NavMeshSurface navSurface;
     private Vector3 moveDirection = Vector3.zero;
     public Rigidbody rb; // set on awake
     public float currentSpeed = 2.0f;
@@ -21,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 worldPos;
 
     public MazeGenerator mazeGenerator;
+    public EnemyMovement enemyMovement;
 
     private float cellSize;
 
@@ -69,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
             
             // This is a sihlouette of the wall that will be placed.
             wallSill.transform.position = worldPos;
-            if (Mathf.RoundToInt(worldPos.x / cellSize) % 2 != 0) // This contained a rounding error :)
+            if (Mathf.RoundToInt(worldPos.x / cellSize) % 2 != 0 ^ Mathf.RoundToInt(worldPos.z / cellSize) % 2 == 0) // This contained a rounding error :)
             {
                 wallSill.transform.rotation =  Quaternion.Euler(0f, 90f, 0f);
             } else
@@ -77,15 +80,27 @@ public class PlayerMovement : MonoBehaviour
                 wallSill.transform.rotation =  Quaternion.Euler(0f, 0f, 0f);
             }
 
+            // if (Mathf.RoundToInt(worldPos.z / cellSize) % 2 == 0) // This contained a rounding error :)
+            // {
+            //     wallSill.transform.rotation =  Quaternion.Euler(0f, 90f, 0f);
+            // } else
+            // {
+            //     wallSill.transform.rotation =  Quaternion.Euler(0f, 0f, 0f);
+            // }
+            // Debug.Log(Mathf.RoundToInt(worldPos.x / cellSize) % 2);
+            // Debug.Log(Mathf.RoundToInt(worldPos.z / cellSize) % 2);
+            
+
             if (placeAction.WasPressedThisFrame())
             {
                 Place(worldPos);   
             }
         }
 
-        if (removeAction.WasPressedThisFrame())
+        if (removeAction.WasPressedThisFrame() && placable == 0)
         {
             Remove();
+        //  navSurface.BuildNavMesh();
         }
 
     }
@@ -102,8 +117,10 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Place(Vector3 worldPos)
     {
+
         wallInstance = Instantiate(wall, worldPos, Quaternion.identity);
-        if (Mathf.RoundToInt(worldPos.x / cellSize) % 2 != 0) // This contained a rounding error :)
+        wallInstance.SetActive(true);
+        if (Mathf.RoundToInt(worldPos.x / cellSize) % 2 != 0 ^ Mathf.RoundToInt(worldPos.z / cellSize) % 2 == 0) // This contained a rounding error :)
         {
             wallInstance.transform.rotation =  Quaternion.Euler(0f, 90f, 0f);
         } else
@@ -112,12 +129,16 @@ public class PlayerMovement : MonoBehaviour
         }
         placable = 0;
         wallSill.SetActive(false);
+        navSurface.BuildNavMesh();
+        enemyMovement.InvestigatePoint(worldPos);
     }
 
     private void Remove()
     {
-        Destroy(wallInstance);
+        wall.SetActive(false);
+        navSurface.BuildNavMesh();
         placable = 1;
         wallSill.SetActive(true);
+        Destroy(wallInstance);
     }
 }
