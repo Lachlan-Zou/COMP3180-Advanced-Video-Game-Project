@@ -120,7 +120,6 @@ public class PlayerMovement : MonoBehaviour
     {
 
         wallInstance = Instantiate(wall, worldPos, Quaternion.identity);
-        wallInstance.SetActive(true);
         if (Mathf.RoundToInt(worldPos.x / cellSize) % 2 != 0 ^ Mathf.RoundToInt(worldPos.z / cellSize) % 2 == 0) // This contained a rounding error :)
         {
             wallInstance.transform.rotation =  Quaternion.Euler(0f, 90f, 0f);
@@ -130,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
         }
         placable = 0;
         wallSill.SetActive(false);
-        navSurface.BuildNavMesh();
+        //navSurface.BuildNavMesh();
         enemyMovement.InvestigatePoint(worldPos);
     }
 
@@ -139,36 +138,8 @@ public class PlayerMovement : MonoBehaviour
         placable = 1;
         wallSill.SetActive(true);
 
-        GameObject removedWall = wallInstance;
+        Destroy(wallInstance);
 
-        Debug.Log($"removing wall: {removedWall.name}");
-        Debug.Log($"NavmeshSurface exists: {navSurface != null}");
-
-        wall.SetActive(false);
-
-        Debug.Log(
-            $"wall active? {wallInstance.activeInHierarchy}" 
-            
-           );
-
-        navSurface.BuildNavMesh();
-
-        Debug.Log("navmesh made");
-
-        Destroy(removedWall);
-
-        StartCoroutine(RemoveWall(wallInstance));
     }
 
-    private IEnumerator RemoveWall(GameObject wall)
-    {
-        
-
-        yield return new WaitForEndOfFrame();
-
-        navSurface.BuildNavMesh();
-        Debug.Log("Navmesh built");
-
-        Destroy(wall);
-    }
 }
