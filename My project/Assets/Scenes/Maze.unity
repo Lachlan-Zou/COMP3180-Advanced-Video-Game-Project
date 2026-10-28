@@ -945,11 +945,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1938573856346195490, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
       propertyPath: _mazeDepth
-      value: 25
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1938573856346195490, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
       propertyPath: _mazeWidth
-      value: 30
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4047258455622427132, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
       propertyPath: m_LocalPosition.x
