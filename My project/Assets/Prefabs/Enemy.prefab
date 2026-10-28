@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 572456364479963606}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.481, y: 0.36, z: 0}
+  m_LocalPosition: {x: 0, y: 0.36, z: 0.5}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 2560284701078673882}
   - component: {fileID: 135441464607904737}
   - component: {fileID: -4928749420122755081}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,7 +267,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
   mazeGenerator: {fileID: 1938573856346195490, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
   enemySight: {fileID: 135441464607904737}
-  range: 10
 --- !u!114 &135441464607904737
 MonoBehaviour:
   m_ObjectHideFlags: 0

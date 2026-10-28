@@ -18,7 +18,7 @@ public class FieldofView : MonoBehaviour
 
     private void Start()
     {
-        playerRef = GameObject.FindGameObjectWithTag("Player");
+        playerRef = GameObject.FindGameObjectWithTag("Target");
         StartCoroutine(FOVRoutine());
     }
 
@@ -47,14 +47,26 @@ public class FieldofView : MonoBehaviour
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
+                {
+                    //Debug.Log("Can see the player");
                     canSeePlayer = true;
+                }
                 else
+                {
                     canSeePlayer = false;
+                    //Debug.Log("Wall in the way");
+                }
             }
             else
+            {
+                //Debug.Log("'player' is not within angle");
                 canSeePlayer = false;
+            }
         }
         else if (canSeePlayer)
+        {
+            //Debug.Log("can see player true and range check is 0");
             canSeePlayer = false;
+        }
     }
 }

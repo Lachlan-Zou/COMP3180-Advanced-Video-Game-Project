@@ -16,8 +16,7 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 pointofInterest;
     private Vector3 searchPoint;
     public EnemySight enemySight;
-    
-    [SerializeField] private float range = 5.0f;
+    private Renderer myRenderer;
     private enum State
     {
         Search,
@@ -33,7 +32,9 @@ public class EnemyMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        myRenderer = GetComponent<Renderer>();
 
+        // Method A: Direct assignment (Creates a unique material instance clone)
         RebuildNavMesh();
         target = GameObject.Find("Target");
 
@@ -52,6 +53,7 @@ public class EnemyMovement : MonoBehaviour
         switch (currentState)
         {
             case State.Search:
+                myRenderer.material.color = Color.red;
                 agent.SetDestination(searchPoint);
                 GetComponent<NavMeshAgent>().speed = 3.5f;
                 if (agent.remainingDistance < 1f)
@@ -84,6 +86,7 @@ public class EnemyMovement : MonoBehaviour
                 //}
                 break;
             case State.Suspicion:
+                myRenderer.material.color = Color.yellow;
                 agent.SetDestination(pointofInterest);
                 
                 if (!NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas))
@@ -99,6 +102,7 @@ public class EnemyMovement : MonoBehaviour
                 }
                 break;
             case State.Chase:
+                myRenderer.material.color = Color.red;
                 agent.SetDestination(target.transform.position);
                 GetComponent<NavMeshAgent>().speed = 5f;
                 if (!enemySight.canSeePlayer)

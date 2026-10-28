@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2829743156357258566}
   - component: {fileID: 5904607958601272469}
   - component: {fileID: 4781389913861477468}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -166,7 +166,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6491307285815493577}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Placed Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
