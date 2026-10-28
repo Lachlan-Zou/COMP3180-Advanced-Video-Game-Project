@@ -48,25 +48,22 @@ public class FieldofView : MonoBehaviour
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
-                    //Debug.Log("Can see the player");
                     canSeePlayer = true;
                 }
                 else
                 {
                     canSeePlayer = false;
-                    //Debug.Log("Wall in the way");
                 }
             }
             else
             {
-                //Debug.Log("'player' is not within angle");
                 canSeePlayer = false;
             }
         }
         else if (canSeePlayer)
         {
-            //Debug.Log("can see player true and range check is 0");
             canSeePlayer = false;
         }
+        //Debug.Log(canSeePlayer);
     }
 }

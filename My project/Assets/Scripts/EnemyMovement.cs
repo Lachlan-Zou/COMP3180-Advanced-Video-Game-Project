@@ -15,7 +15,7 @@ public class EnemyMovement : MonoBehaviour
     private float cellSize;
     private Vector3 pointofInterest;
     private Vector3 searchPoint;
-    public EnemySight enemySight;
+    public FieldofView foV;
     private Renderer myRenderer;
     private enum State
     {
@@ -53,7 +53,7 @@ public class EnemyMovement : MonoBehaviour
         switch (currentState)
         {
             case State.Search:
-                myRenderer.material.color = Color.red;
+                myRenderer.material.color = Color.green;
                 agent.SetDestination(searchPoint);
                 GetComponent<NavMeshAgent>().speed = 3.5f;
                 if (agent.remainingDistance < 1f)
@@ -67,11 +67,6 @@ public class EnemyMovement : MonoBehaviour
                     {
                         searchPoint = point;
                     }
-                }
-
-                if (!NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas))
-                {
-                    currentState = State.Chase;
                 }
 
                 //if (Vector3.Distance(transform.position, target.transform.position) < range)
@@ -89,23 +84,16 @@ public class EnemyMovement : MonoBehaviour
                 myRenderer.material.color = Color.yellow;
                 agent.SetDestination(pointofInterest);
                 
-                if (!NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas))
-                {
-                    currentState = State.Chase;
-                }
                 if (agent.remainingDistance < 1f)
                 {
-                    if (NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas))
-                    {
-                        currentState = State.Search;
-                    }
+                    currentState = State.Search;
                 }
                 break;
             case State.Chase:
                 myRenderer.material.color = Color.red;
                 agent.SetDestination(target.transform.position);
                 GetComponent<NavMeshAgent>().speed = 5f;
-                if (!enemySight.canSeePlayer)
+                if (!foV.canSeePlayer)
                 {
                     pointofInterest = target.transform.position;
                     currentState = State.Suspicion;
@@ -113,19 +101,13 @@ public class EnemyMovement : MonoBehaviour
                 
                 break;
         }
-        bool blocked = false;
-        blocked = NavMesh.Raycast(transform.position, target.transform.position, out hit, NavMesh.AllAreas);
-        //Debug.DrawLine(transform.position, target.transform.position, blocked ? Color.red : Color.green);
-        //Debug.Log(currentState);
 
-        if (enemySight.canSeePlayer)
+        if (foV.canSeePlayer)
         {
             currentState = State.Chase;
         }
-   //     Debug.Log(currentState);
-        //  Debug.Log(enemySight.canSeePlayer);
 
-        enemySight.CanSeeTarget();
+        Debug.Log(foV.canSeePlayer);
     }
 
     public void RebuildNavMesh()
