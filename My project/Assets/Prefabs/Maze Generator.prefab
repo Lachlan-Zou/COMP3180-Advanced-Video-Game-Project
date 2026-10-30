@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db9b313f633d4cf46b6b1c6f26887902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MazeGenerator
+  target: {fileID: 0}
   _mazeCellPrefab: {fileID: 6647520650995249732, guid: 7e2dbf846bc1dbd4785b3fd9d6bfb0c0, type: 3}
-  _mazeWidth: 10
-  _mazeDepth: 10
+  mySceneManager: {fileID: 0}
+  _mazeWidth: 5
+  _mazeDepth: 5
+  _cellSize: 1.6

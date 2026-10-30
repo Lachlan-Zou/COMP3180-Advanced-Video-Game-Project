@@ -58,15 +58,15 @@ public class EnemyMovement : MonoBehaviour
                 GetComponent<NavMeshAgent>().speed = 3.5f;
                 if (agent.remainingDistance < 1f)
                 {
-                    Vector3 point = GenerateRandomPoint();
-                    if (point == searchPoint)
-                    {
-                        point = GenerateRandomPoint();
-                    }
-                    else
-                    {
-                        searchPoint = point;
-                    }
+                    // Vector3 point = GenerateRandomPoint();
+                    // if (point == searchPoint)
+                    // {
+                    //     point = GenerateRandomPoint();
+                    // }
+                    // else
+                    // {
+                    //     searchPoint = point;
+                    // }
                 }
 
                 //if (Vector3.Distance(transform.position, target.transform.position) < range)
@@ -107,7 +107,6 @@ public class EnemyMovement : MonoBehaviour
             currentState = State.Chase;
         }
 
-        Debug.Log(foV.canSeePlayer);
     }
 
     public void RebuildNavMesh()
@@ -131,7 +130,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void InvestigatePoint(Vector3 position)
     {
-        Debug.Log(position);
+        //Debug.Log(position);
         currentState = State.Suspicion;
         pointofInterest = position;
     }

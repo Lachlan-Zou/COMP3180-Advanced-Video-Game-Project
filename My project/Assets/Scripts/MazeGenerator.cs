@@ -9,13 +9,19 @@ public class MazeGenerator : MonoBehaviour
 {
     [SerializeField] private GameObject target;
     [SerializeField] private MazeCell _mazeCellPrefab;
+    public MySceneManager  mySceneManager;
+    public MainCameraCentre mainCameraCentre;
     public int _mazeWidth;
     public int _mazeDepth;
     public float _cellSize;
+    public GameObject enemy;
     private MazeCell[,] _mazeGrid;
-
-    void Awake()
+    void Start()
     {
+        mySceneManager = MySceneManager.Instance;
+
+        _mazeWidth = mySceneManager.mazeWidth;
+        _mazeDepth = mySceneManager.mazeDepth;
         _mazeGrid = new MazeCell[_mazeWidth, _mazeDepth];
 
         for (int x = 0; x < _mazeWidth; x++)
@@ -32,6 +38,9 @@ public class MazeGenerator : MonoBehaviour
         
         target.transform.position = new Vector3((_mazeWidth - 1)/2 * _cellSize, 1, 
                                                 (_mazeDepth - 1)/2 * _cellSize);
+        //Debug.Log(_mazeDepth == mySceneManager.mazeDepth);
+        Instantiate(enemy, new Vector3(0,1,0), Quaternion.identity);
+        mainCameraCentre.RepositionCamera();
     }
 
     private void GenerateMaze(MazeCell previousCell, MazeCell currentCell)
