@@ -19,6 +19,7 @@ public class EnemyMovement : MonoBehaviour
     private Renderer myRenderer;
     public GameObject theSceneManager;
     public MySceneManager mySceneManager;
+    private LineRenderer lineRenderer;
     private enum State
     {
         Search,
@@ -30,6 +31,8 @@ public class EnemyMovement : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         navSurface = FindFirstObjectByType<NavMeshSurface>();
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.positionCount = 0;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -92,7 +95,7 @@ public class EnemyMovement : MonoBehaviour
         if (foV.canSeePlayer)
         {
             currentState = State.Chase;
-            Time.timeScale = 0f;
+            //Time.timeScale = 0f;
         }
         if (agent.velocity.sqrMagnitude > 0.01f)
         {
@@ -100,7 +103,7 @@ public class EnemyMovement : MonoBehaviour
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * turnSpeed);
         }
-        //Debug.Log(agent.destination);
+        GenerateLine();
     }
 
     public void RebuildNavMesh()
@@ -127,5 +130,24 @@ public class EnemyMovement : MonoBehaviour
         //Debug.Log(position);
         currentState = State.Suspicion;
         pointofInterest = position;
+    }
+
+    public void GenerateLine()
+    {
+        if (agent.hasPath)
+        {
+            // Get the corners of the calculated path
+            Vector3[] corners = agent.path.corners;
+            lineRenderer.positionCount = corners.Length;
+
+            for (int i = 0; i < corners.Length; i++)
+            {
+                // Slightly lift the line off the floor to prevent z-fighting
+                lineRenderer.SetPosition(i, corners[i] + Vector3.up * 0.1f);
+            }
+        } else
+        {
+            lineRenderer.positionCount = 0;
+        }
     }
 }

@@ -54,6 +54,19 @@ public class FieldofView : MonoBehaviour
                 {
                     canSeePlayer = false;
                 }
+
+                RaycastHit[] hits = Physics.RaycastAll(transform.position, directionToTarget, distanceToTarget);
+
+                // 3. Loop through and log every object hit
+                for (int i = 0; i < hits.Length; i++)
+                {
+                    RaycastHit hit = hits[i];
+                    GameObject hitObject = hit.collider.gameObject;
+
+                    // Passing hitObject as the second parameter highlights it in the Hierarchy when clicked!
+                    Debug.Log(hitObject.layer);
+                    Debug.Log($"Hit [{i}]: {hitObject.name} at distance {hit.distance}m", hitObject);
+                }
             }
             else
             {
