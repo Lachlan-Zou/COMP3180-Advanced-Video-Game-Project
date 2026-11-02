@@ -11,6 +11,7 @@ public class MySceneManager : MonoBehaviour
     public TextMeshProUGUI widthValue;
     public MazeGenerator mazeGenerator;
     public GameObject UICanvas;
+    public CanvasInstance canvasInstance;
     void Awake()
     {
         // If an instance already exists and it's not this one, destroy this copy
@@ -68,6 +69,7 @@ public class MySceneManager : MonoBehaviour
         }
 
         UICanvas = GameObject.Find("Canvas");
+        canvasInstance.currentTime = 0f;
     }
     public void OnDepthChange(float value)
     {
