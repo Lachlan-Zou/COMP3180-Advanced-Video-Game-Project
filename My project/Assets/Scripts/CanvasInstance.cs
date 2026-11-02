@@ -64,17 +64,14 @@ public class CanvasInstance : MonoBehaviour
             }
         } 
     }
-
     void Pause()
     {
         Paused = true;
         Time.timeScale = 0f;
     }
-
     void Resume()
     {
         Paused = false;
         Time.timeScale = 1f;
     }
-
 }

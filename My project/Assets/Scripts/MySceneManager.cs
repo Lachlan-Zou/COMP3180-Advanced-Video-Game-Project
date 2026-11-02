@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement; // Required for managing scenes
 using TMPro;
@@ -12,6 +13,7 @@ public class MySceneManager : MonoBehaviour
     public MazeGenerator mazeGenerator;
     public GameObject UICanvas;
     public CanvasInstance canvasInstance;
+    public List<string> recordedTimes = new List<string>();
     void Awake()
     {
         // If an instance already exists and it's not this one, destroy this copy
@@ -37,6 +39,7 @@ public class MySceneManager : MonoBehaviour
         mazeGenerator._mazeWidth = mazeWidth;
 
         UICanvas = GameObject.Find("Canvas");
+        canvasInstance = UICanvas.GetComponent<CanvasInstance>();
         //Debug.Log(mazeDepth);
     }
 
@@ -61,7 +64,7 @@ public class MySceneManager : MonoBehaviour
             mazeGenerator._mazeDepth = mazeDepth;
             mazeGenerator._mazeWidth = mazeWidth;
 
-            Debug.Log("Maze dimensions: " + mazeDepth + " x " + mazeWidth);
+            //Debug.Log("Maze dimensions: " + mazeDepth + " x " + mazeWidth);
         }
         else
         {
@@ -70,6 +73,7 @@ public class MySceneManager : MonoBehaviour
 
         UICanvas = GameObject.Find("Canvas");
         canvasInstance.currentTime = 0f;
+        Time.timeScale = 1f;
     }
     public void OnDepthChange(float value)
     {
@@ -86,5 +90,10 @@ public class MySceneManager : MonoBehaviour
     {
         // Gets the current active scene and reloads it using its build index
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void QuitApplication()
+    {
+        Time.timeScale = 0f;
     }
 }

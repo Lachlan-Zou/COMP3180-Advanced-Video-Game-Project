@@ -264,8 +264,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393a9009f596ca04da2f62e6119272fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  turnSpeed: 30
   mazeGenerator: {fileID: 1938573856346195490, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
   foV: {fileID: -4928749420122755081}
+  theSceneManager: {fileID: 1068746339641206062, guid: 9b3e9f1deb178f94baddb7218baa3b7a, type: 3}
+  mySceneManager: {fileID: 0}
 --- !u!114 &-4928749420122755081
 MonoBehaviour:
   m_ObjectHideFlags: 0

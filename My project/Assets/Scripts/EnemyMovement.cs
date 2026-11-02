@@ -1,15 +1,15 @@
 using UnityEngine;
 using Unity.AI.Navigation;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
 public class EnemyMovement : MonoBehaviour
 {
     private GameObject target;
-    private Transform targetTransform;
     private NavMeshAgent agent;
     private NavMeshSurface navSurface;
+    [SerializeField] private float turnSpeed;
     public MazeGenerator mazeGenerator;
-    private NavMeshHit hit;
     private float mazeDepth;
     private float mazeWidth;
     private float cellSize;
@@ -17,10 +17,12 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 searchPoint;
     public FieldofView foV;
     private Renderer myRenderer;
+    public GameObject theSceneManager;
+    public MySceneManager mySceneManager;
     private enum State
     {
         Search,
-        Suspicion, 
+        Suspicion,
         Chase,
     }
     private State currentState = State.Search;
@@ -32,6 +34,7 @@ public class EnemyMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        mySceneManager = theSceneManager.GetComponent<MySceneManager>();
         myRenderer = GetComponent<Renderer>();
 
         // Method A: Direct assignment (Creates a unique material instance clone)
@@ -43,7 +46,7 @@ public class EnemyMovement : MonoBehaviour
         mazeWidth = mazeGenerator._mazeWidth;
         cellSize = mazeGenerator._cellSize;
 
-        agent.updateRotation = true;
+        agent.updateRotation = false;
 
         searchPoint = new Vector3((mazeWidth - 1) * cellSize, 0, (mazeDepth - 1) * cellSize);
     }
@@ -58,32 +61,13 @@ public class EnemyMovement : MonoBehaviour
                 GetComponent<NavMeshAgent>().speed = 3.5f;
                 if (agent.remainingDistance < 1f)
                 {
-                    // Vector3 point = GenerateRandomPoint();
-                    // if (point == searchPoint)
-                    // {
-                    //     point = GenerateRandomPoint();
-                    // }
-                    // else
-                    // {
-                    //     searchPoint = point;
-                    // }
+                    searchPoint = GenerateRandomPoint();
                 }
-
-                //if (Vector3.Distance(transform.position, target.transform.position) < range)
-                //{
-                //    currentState = State.Suspicion;
-
-                //    randomPoint = GenerateRandomPoint();
-
-                //    randomPoint.y = transform.position.y;
-
-                //    agent.SetDestination(randomPoint);
-                //}
                 break;
             case State.Suspicion:
                 myRenderer.material.color = Color.yellow;
                 agent.SetDestination(pointofInterest);
-                
+
                 if (agent.remainingDistance < 1f)
                 {
                     currentState = State.Search;
@@ -98,7 +82,10 @@ public class EnemyMovement : MonoBehaviour
                     pointofInterest = target.transform.position;
                     currentState = State.Suspicion;
                 }
-                
+                if (agent.remainingDistance < 1f)
+                {
+                    mySceneManager.QuitApplication();
+                }
                 break;
         }
 
@@ -106,7 +93,13 @@ public class EnemyMovement : MonoBehaviour
         {
             currentState = State.Chase;
         }
-        Debug.Log(agent.destination);
+        if (agent.velocity.sqrMagnitude > 0.01f)
+        {
+            Vector3 direction = agent.velocity.normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * turnSpeed);
+        }
+        //Debug.Log(agent.destination);
     }
 
     public void RebuildNavMesh()
@@ -124,7 +117,7 @@ public class EnemyMovement : MonoBehaviour
         if (NavMesh.CalculatePath(transform.position, randomPoint, NavMesh.AllAreas, path) && path.status == NavMeshPathStatus.PathComplete)
         {
             return randomPoint;
-        } 
+        }
         return GenerateRandomPoint();
     }
 
