@@ -169,7 +169,7 @@ public class MazeGenerator : MonoBehaviour
             int randomZ = Random.Range(1, _mazeDepth - 1);
 
             MazeCell randomCell = _mazeGrid[randomX, randomZ];
-            int randomNum = Random.Range(0, 4);
+            //int randomNum = Random.Range(0, 4);
             // switch (randomNum)
             // {
             //     case 0:
