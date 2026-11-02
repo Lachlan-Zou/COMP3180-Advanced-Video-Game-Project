@@ -106,7 +106,7 @@ public class EnemyMovement : MonoBehaviour
         {
             currentState = State.Chase;
         }
-
+        Debug.Log(agent.destination);
     }
 
     public void RebuildNavMesh()

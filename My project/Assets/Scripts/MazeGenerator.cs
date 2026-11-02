@@ -15,6 +15,7 @@ public class MazeGenerator : MonoBehaviour
     public int _mazeDepth;
     public float _cellSize;
     public GameObject enemy;
+    public int lessWalls;
     private MazeCell[,] _mazeGrid;
     void Start()
     {
@@ -41,6 +42,9 @@ public class MazeGenerator : MonoBehaviour
         //Debug.Log(_mazeDepth == mySceneManager.mazeDepth);
         Instantiate(enemy, new Vector3(0,1,0), Quaternion.identity);
         mainCameraCentre.RepositionCamera();
+
+        lessWalls = Mathf.RoundToInt(_mazeDepth * _mazeWidth / 4);
+        RemoveMoreWalls();
     }
 
     private void GenerateMaze(MazeCell previousCell, MazeCell currentCell)
@@ -121,6 +125,7 @@ public class MazeGenerator : MonoBehaviour
             return;
         }
 
+        // If the previous cell is to the left of the current cell
         if (previousCell.transform.position.x < currentCell.transform.position.x)
         {
             previousCell.ClearRightWall();
@@ -128,6 +133,7 @@ public class MazeGenerator : MonoBehaviour
             return;
         }
 
+        // If the previous cell is to the right of the current cell
         if (previousCell.transform.position.x > currentCell.transform.position.x)
         {
             previousCell.ClearLeftWall();
@@ -135,6 +141,7 @@ public class MazeGenerator : MonoBehaviour
             return;
         }
 
+        // If the previous cell is below the current cell
         if (previousCell.transform.position.z < currentCell.transform.position.z)
         {
             previousCell.ClearFrontWall();
@@ -142,11 +149,54 @@ public class MazeGenerator : MonoBehaviour
             return;
         }
 
+        // If the previous cell is above the current cell
         if (previousCell.transform.position.z > currentCell.transform.position.z)
         {
+            Debug.Log("Do we ever go here, I don't know.");
             previousCell.ClearBackWall();
             currentCell.ClearFrontWall();
             return;
+        }
+
+
+    }
+
+    private void RemoveMoreWalls()
+    {
+        for (int i = 0; i < lessWalls; i++)
+        {
+            int randomX = Random.Range(1, _mazeWidth - 1);
+            int randomZ = Random.Range(1, _mazeDepth - 1);
+
+            MazeCell randomCell = _mazeGrid[randomX, randomZ];
+            int randomNum = Random.Range(0, 4);
+            // switch (randomNum)
+            // {
+            //     case 0:
+            //         randomCell.ClearFrontWall();
+            //         _mazeGrid[randomX, randomZ + 1].ClearBackWall();
+            //         break;
+            //     case 1:
+            //         randomCell.ClearLeftWall();
+            //         _mazeGrid[randomX - 1, randomZ].ClearRightWall();
+            //         break;
+            //     case 2:
+            //         randomCell.ClearBackWall();
+            //         _mazeGrid[randomX, randomZ - 1].ClearFrontWall();
+            //         break;
+            //     case 3:
+            //         randomCell.ClearRightWall();
+            //         _mazeGrid[randomX + 1, randomZ].ClearLeftWall();
+            //         break;
+            // }
+            randomCell.ClearFrontWall();
+            randomCell.ClearLeftWall();
+            randomCell.ClearBackWall();
+            randomCell.ClearRightWall();
+            
+            // Debug.Log(randomNum);
+            // Debug.Log(new Vector2(randomX, randomZ));
+
         }
     }
 
