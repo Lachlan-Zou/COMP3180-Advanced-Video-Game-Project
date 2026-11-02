@@ -39,12 +39,13 @@ public class MazeGenerator : MonoBehaviour
         
         target.transform.position = new Vector3((_mazeWidth - 1)/2 * _cellSize, 1, 
                                                 (_mazeDepth - 1)/2 * _cellSize);
-        //Debug.Log(_mazeDepth == mySceneManager.mazeDepth);
-        Instantiate(enemy, new Vector3(0,1,0), Quaternion.identity);
+        
         mainCameraCentre.RepositionCamera();
 
         lessWalls = Mathf.RoundToInt(_mazeDepth * _mazeWidth / 4);
-        RemoveMoreWalls();
+        //RemoveMoreWalls();
+
+        //Instantiate(enemy, new Vector3(0, 1, 0), Quaternion.identity);
     }
 
     private void GenerateMaze(MazeCell previousCell, MazeCell currentCell)
@@ -152,7 +153,6 @@ public class MazeGenerator : MonoBehaviour
         // If the previous cell is above the current cell
         if (previousCell.transform.position.z > currentCell.transform.position.z)
         {
-            Debug.Log("Do we ever go here, I don't know.");
             previousCell.ClearBackWall();
             currentCell.ClearFrontWall();
             return;

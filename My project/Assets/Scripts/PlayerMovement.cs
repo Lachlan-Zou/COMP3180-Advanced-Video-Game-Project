@@ -56,6 +56,11 @@ public class PlayerMovement : MonoBehaviour
         cellSize = mazeGenerator._cellSize;
     }
 
+    void Start()
+    {
+        
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -68,12 +73,12 @@ public class PlayerMovement : MonoBehaviour
         {
             worldPos = hit.point;
             
-            worldPos.x = Mathf.Round(worldPos.x / cellSize) * cellSize;
-            worldPos.z = Mathf.Round(worldPos.z / cellSize) * cellSize;
-            
+            worldPos.x = Mathf.Round(worldPos.x / (cellSize / 2)) * (cellSize / 2);
+            worldPos.z = Mathf.Round(worldPos.z / (cellSize / 2)) * (cellSize / 2);
+
             // This is a sihlouette of the wall that will be placed.
-            wallSill.transform.position = worldPos;
-            if (Mathf.RoundToInt(worldPos.x / cellSize) % 2 != 0 ^ Mathf.RoundToInt(worldPos.z / cellSize) % 2 == 0) // This contained a rounding error :)
+            wallSill.transform.position = new Vector3(worldPos.x, 0f, worldPos.z);
+            if (Mathf.RoundToInt(worldPos.x / (cellSize / 2)) % 2 != 0 ^ Mathf.RoundToInt(worldPos.z / (cellSize / 2)) % 2 == 0) // This contained a rounding error :)
             {
                 wallSill.transform.rotation =  Quaternion.Euler(0f, 90f, 0f);
             } else
@@ -90,12 +95,20 @@ public class PlayerMovement : MonoBehaviour
             // }
             // Debug.Log(Mathf.RoundToInt(worldPos.x / cellSize) % 2);
             // Debug.Log(Mathf.RoundToInt(worldPos.z / cellSize) % 2);
+
+            float XDistance = Mathf.Abs(worldPos.x - (Mathf.Round((worldPos.x / 0.8f) * 0.8f)));
+            float ZDistance = Mathf.Abs(worldPos.z - (Mathf.Round((worldPos.z / 0.8f) * 0.8f)));
+            Debug.Log(XDistance);
+            Debug.Log(ZDistance);
+            Debug.Log(XDistance < ZDistance);
             
 
             if (placeAction.WasPressedThisFrame())
             {
                 Place(worldPos);   
             }
+
+            
         }
 
         if (removeAction.WasPressedThisFrame() && placable == 0)
