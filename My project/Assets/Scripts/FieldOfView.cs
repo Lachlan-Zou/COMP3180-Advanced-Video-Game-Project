@@ -64,6 +64,5 @@ public class FieldofView : MonoBehaviour
         {
             canSeePlayer = false;
         }
-        //Debug.Log(canSeePlayer);
     }
 }

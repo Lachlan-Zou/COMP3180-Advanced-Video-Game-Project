@@ -92,6 +92,7 @@ public class EnemyMovement : MonoBehaviour
         if (foV.canSeePlayer)
         {
             currentState = State.Chase;
+            Time.timeScale = 0f;
         }
         if (agent.velocity.sqrMagnitude > 0.01f)
         {
