@@ -56,6 +56,7 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
+        target ??= GameObject.Find("Target");
         switch (currentState)
         {
             case State.Search:
@@ -75,6 +76,7 @@ public class EnemyMovement : MonoBehaviour
                 {
                     currentState = State.Search;
                 }
+                Debug.Log(agent.destination == pointofInterest);
                 break;
             case State.Chase:
                 myRenderer.material.color = Color.red;

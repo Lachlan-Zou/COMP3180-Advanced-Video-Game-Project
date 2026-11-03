@@ -56,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
         cellSize = mazeGenerator._cellSize;
     }
 
-    void Start()
+    public void GetEnemy()
     {
         
     }
@@ -64,58 +64,67 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector3 rotationAngle = new Vector3(0f, 0f, 0f);
         moveDirection = new Vector3(moveAction.ReadValue<Vector2>().normalized.x, moveDirection.y, moveAction.ReadValue<Vector2>().normalized.y);
-        
+
         mousePos = Mouse.current.position.ReadValue();
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
 
         if (Physics.Raycast(ray, out RaycastHit hit) && placable == 1)
         {
             worldPos = hit.point;
-            
-            worldPos.x = Mathf.Round(worldPos.x / (cellSize / 2)) * (cellSize / 2);
-            worldPos.z = Mathf.Round(worldPos.z / (cellSize / 2)) * (cellSize / 2);
 
-            // This is a sihlouette of the wall that will be placed.
-            wallSill.transform.position = new Vector3(worldPos.x, 0f, worldPos.z);
-            if (Mathf.RoundToInt(worldPos.x / (cellSize / 2)) % 2 != 0 ^ Mathf.RoundToInt(worldPos.z / (cellSize / 2)) % 2 == 0) // This contained a rounding error :)
+            // Find the centre of the nearest cell
+            float halfCell = cellSize / 2f;
+
+            float cellX = Mathf.Round(worldPos.x / cellSize) * cellSize;
+            float cellZ = Mathf.Round(worldPos.z / cellSize) * cellSize;
+
+            // Calculate distance to each of the four edges
+            float left = Mathf.Abs(worldPos.x - (cellX - halfCell));
+            float right = Mathf.Abs(worldPos.x - (cellX + halfCell));
+            float bottom = Mathf.Abs(worldPos.z - (cellZ - halfCell));
+            float top = Mathf.Abs(worldPos.z - (cellZ + halfCell));
+
+            // Determine which orientation is closest
+            bool verticalEdge = Mathf.Min(left, right) < Mathf.Min(top, bottom);
+
+            if (verticalEdge)
             {
-                wallSill.transform.rotation =  Quaternion.Euler(0f, 90f, 0f);
-            } else
+                rotationAngle.y = 0f;
+                // Left or right edge
+                worldPos.x = left < right ? cellX - halfCell : cellX + halfCell;
+                worldPos.z = cellZ;
+
+                wallSill.transform.rotation = Quaternion.Euler(rotationAngle);
+            }
+            else
             {
-                wallSill.transform.rotation =  Quaternion.Euler(0f, 0f, 0f);
+                rotationAngle.y = 90f;
+                // Top or bottom edge
+                worldPos.x = cellX;
+                worldPos.z = bottom < top ? cellZ - halfCell : cellZ + halfCell;
+
+                wallSill.transform.rotation = Quaternion.Euler(rotationAngle);
             }
 
-            // if (Mathf.RoundToInt(worldPos.z / cellSize) % 2 == 0) // This contained a rounding error :)
-            // {
-            //     wallSill.transform.rotation =  Quaternion.Euler(0f, 90f, 0f);
-            // } else
-            // {
-            //     wallSill.transform.rotation =  Quaternion.Euler(0f, 0f, 0f);
-            // }
-            // Debug.Log(Mathf.RoundToInt(worldPos.x / cellSize) % 2);
-            // Debug.Log(Mathf.RoundToInt(worldPos.z / cellSize) % 2);
+            // Position the wall silhouette
+            wallSill.transform.position = new Vector3(worldPos.x, 0f, worldPos.z);
 
-            float XDistance = Mathf.Abs(worldPos.x - (Mathf.Round((worldPos.x / 0.8f) * 0.8f)));
-            float ZDistance = Mathf.Abs(worldPos.z - (Mathf.Round((worldPos.z / 0.8f) * 0.8f)));
-            Debug.Log(XDistance);
-            Debug.Log(ZDistance);
-            Debug.Log(XDistance < ZDistance);
-            
 
             if (placeAction.WasPressedThisFrame())
             {
-                Place(worldPos);   
+                Place(worldPos, rotationAngle, verticalEdge);
             }
 
-            
+
         }
 
         if (removeAction.WasPressedThisFrame() && placable == 0)
         {
             Remove();
         }
-        
+
 
     }
     private void FixedUpdate()
@@ -129,16 +138,17 @@ public class PlayerMovement : MonoBehaviour
 
         //Debug.Log(rb.position + currentSpeed * Time.fixedDeltaTime * movement.normalized);
     }
-    private void Place(Vector3 worldPos)
+    private void Place(Vector3 worldPos, Vector3 angle, bool vertical)
     {
 
-        wallInstance = Instantiate(wall, worldPos, Quaternion.identity);
-        if (Mathf.RoundToInt(worldPos.x / cellSize) % 2 != 0 ^ Mathf.RoundToInt(worldPos.z / cellSize) % 2 == 0) // This contained a rounding error :)
+        wallInstance = Instantiate(wall, new Vector3(worldPos.x, 0f, worldPos.z), Quaternion.identity);
+        if (vertical)
         {
-            wallInstance.transform.rotation =  Quaternion.Euler(0f, 90f, 0f);
-        } else
+            wallInstance.transform.rotation = Quaternion.Euler(angle);
+        }
+        else
         {
-            wallInstance.transform.rotation =  Quaternion.Euler(0f, 0f, 0f);
+            wallInstance.transform.rotation = Quaternion.Euler(angle);
         }
         placable = 0;
         wallSill.SetActive(false);

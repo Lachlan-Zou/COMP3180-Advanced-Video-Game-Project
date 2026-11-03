@@ -7,6 +7,6 @@ public class MainCameraCentre : MonoBehaviour
     public void RepositionCamera()
     {
         transform.position = new Vector3(target.position.x, 5f, target.position.z);
-        Debug.Log(target.position);
+        
     }
 }

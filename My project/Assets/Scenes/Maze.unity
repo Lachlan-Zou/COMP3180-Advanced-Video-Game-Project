@@ -410,16 +410,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 161564311}
   m_CullTransparentMesh: 1
---- !u!1 &179086492 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2844191154158927333, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-  m_PrefabInstance: {fileID: 1493693782}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &179086498 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-  m_PrefabInstance: {fileID: 1493693782}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &351512511
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,7 +475,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -953,7 +943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc60aab3d844a5c43a800bcf8ba25fa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainCameraCentre
-  target: {fileID: 179086498}
+  mazeGenerator: {fileID: 1512712691}
 --- !u!1 &772210415
 GameObject:
   m_ObjectHideFlags: 0
@@ -1041,7 +1031,7 @@ MonoBehaviour:
   m_MinValue: 5
   m_MaxValue: 20
   m_WholeNumbers: 1
-  m_Value: 5
+  m_Value: 10
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -1470,7 +1460,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1656,7 +1646,7 @@ MonoBehaviour:
   m_MinValue: 5
   m_MaxValue: 20
   m_WholeNumbers: 1
-  m_Value: 5
+  m_Value: 10
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -1791,6 +1781,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6341d8f3237c549438d2d2c2ae515146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CanvasInstance
+  mySceneManager: {fileID: 1913543482}
   pausedText: {fileID: 2007939544}
   timerText: {fileID: 505135492}
   currentTime: 0
@@ -2083,11 +2074,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1170426792 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7982988932299042193, guid: 882707d93bd6ad84e90263cedbc576dd, type: 3}
-  m_PrefabInstance: {fileID: 2233911125521424307}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1331853270
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2368,7 +2354,7 @@ PrefabInstance:
     - target: {fileID: 1938573856346195490, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 179086492}
+      objectReference: {fileID: 2844191154158927333, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
     - target: {fileID: 1938573856346195490, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
       propertyPath: mySceneManager
       value: 
@@ -2461,75 +2447,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1493693782
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 14.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 567591669653407131, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 767916237619464147, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: wallSill
-      value: 
-      objectReference: {fileID: 1170426792}
-    - target: {fileID: 767916237619464147, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: navSurface
-      value: 
-      objectReference: {fileID: 1126424645}
-    - target: {fileID: 767916237619464147, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: mazeGenerator
-      value: 
-      objectReference: {fileID: 1512712691}
-    - target: {fileID: 2844191154158927333, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
-      propertyPath: m_Name
-      value: Target
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 08226a0db0bdb87499954434a86d1d27, type: 3}
 --- !u!114 &1512712691 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1938573856346195490, guid: 99c8841758e3b5347acbe0da181cd9b3, type: 3}
@@ -3195,7 +3112,6 @@ SceneRoots:
   - {fileID: 1137334530}
   - {fileID: 1331853270}
   - {fileID: 1404061755}
-  - {fileID: 1493693782}
   - {fileID: 2233911125521424307}
   - {fileID: 2016819034}
   - {fileID: 1061328767}

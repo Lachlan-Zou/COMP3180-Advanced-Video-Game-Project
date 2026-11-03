@@ -14,6 +14,7 @@ public class MySceneManager : MonoBehaviour
     public GameObject UICanvas;
     public CanvasInstance canvasInstance;
     public List<string> recordedTimes = new List<string>();
+    public int started = 0;
     void Awake()
     {
         // If an instance already exists and it's not this one, destroy this copy
@@ -74,6 +75,11 @@ public class MySceneManager : MonoBehaviour
         UICanvas = GameObject.Find("Canvas");
         canvasInstance.currentTime = 0f;
         Time.timeScale = 1f;
+        //started = 1;
+    }
+    public void StartGame()
+    {
+        PlayerPrefs.SetInt("HasStarted", 1);
     }
     public void OnDepthChange(float value)
     {

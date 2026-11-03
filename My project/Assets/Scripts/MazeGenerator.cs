@@ -15,8 +15,10 @@ public class MazeGenerator : MonoBehaviour
     public int _mazeDepth;
     public float _cellSize;
     public GameObject enemy;
+    public GameObject enemyInstance;
     public int lessWalls;
     private MazeCell[,] _mazeGrid;
+    public EnemyMovement enemyMovement;
     void Start()
     {
         mySceneManager = MySceneManager.Instance;
@@ -43,9 +45,11 @@ public class MazeGenerator : MonoBehaviour
         mainCameraCentre.RepositionCamera();
 
         lessWalls = Mathf.RoundToInt(_mazeDepth * _mazeWidth / 4);
-        //RemoveMoreWalls();
+        RemoveMoreWalls();
 
-        //Instantiate(enemy, new Vector3(0, 1, 0), Quaternion.identity);
+        enemyInstance = Instantiate(enemy, new Vector3(0, 1, 0), Quaternion.identity);
+        
+
     }
 
     private void GenerateMaze(MazeCell previousCell, MazeCell currentCell)

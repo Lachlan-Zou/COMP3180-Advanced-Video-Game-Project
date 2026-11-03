@@ -6,6 +6,7 @@ using System;
 public class CanvasInstance : MonoBehaviour
 {
     public static CanvasInstance Instance { get; private set; }
+    public MySceneManager mySceneManager;
     public static bool Paused { get; private set; } = false;
     public TextMeshProUGUI pausedText;
     public TextMeshProUGUI timerText;
