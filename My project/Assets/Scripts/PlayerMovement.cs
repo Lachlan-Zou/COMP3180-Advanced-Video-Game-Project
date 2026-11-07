@@ -58,7 +58,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void GetEnemy()
     {
-        
+        GameObject enemy = GameObject.Find("Enemy(Clone)");
+        enemyMovement = enemy.GetComponent<EnemyMovement>();
     }
 
     // Update is called once per frame

@@ -63,20 +63,27 @@ public class EnemyMovement : MonoBehaviour
                 myRenderer.material.color = Color.green;
                 agent.SetDestination(searchPoint);
                 GetComponent<NavMeshAgent>().speed = 3.5f;
-                if (agent.remainingDistance < 1f)
+                if (!agent.pathPending && agent.hasPath && agent.remainingDistance < 1f)
                 {
                     searchPoint = GenerateRandomPoint();
                 }
                 break;
             case State.Suspicion:
                 myRenderer.material.color = Color.yellow;
-                agent.SetDestination(pointofInterest);
 
-                if (agent.remainingDistance < 1f)
+                agent.SetDestination(pointofInterest);
+                if (!agent.pathPending && agent.hasPath && agent.remainingDistance < 1f)
                 {
+                    Debug.Log("Sometimes you bug out?");
                     currentState = State.Search;
                 }
-                Debug.Log(agent.destination == pointofInterest);
+                // Debug.Log(agent.destination);
+                // Debug.Log(pointofInterest);
+
+                // Debug.Log("Path Pending: " + agent.pathPending);
+                // Debug.Log("Has Path: " + agent.hasPath);
+                // Debug.Log("Path Status: " + agent.pathStatus);
+                // Debug.Log("Remaining Distance: " + agent.remainingDistance);
                 break;
             case State.Chase:
                 myRenderer.material.color = Color.red;
@@ -129,9 +136,10 @@ public class EnemyMovement : MonoBehaviour
 
     public void InvestigatePoint(Vector3 position)
     {
-        //Debug.Log(position);
+        Debug.Log("we are investgating point.");
         currentState = State.Suspicion;
         pointofInterest = position;
+        //agent.SetDestination(pointofInterest);
     }
 
     public void GenerateLine()
@@ -147,7 +155,8 @@ public class EnemyMovement : MonoBehaviour
                 // Slightly lift the line off the floor to prevent z-fighting
                 lineRenderer.SetPosition(i, corners[i] + Vector3.up * 0.1f);
             }
-        } else
+        }
+        else
         {
             lineRenderer.positionCount = 0;
         }
