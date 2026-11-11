@@ -128,17 +128,6 @@ public class PlayerMovement : MonoBehaviour
 
 
     }
-    private void FixedUpdate()
-    {
-        Move();
-    }
-    private void Move()
-    {
-        Vector3 movement = (transform.forward * moveDirection.z) + (transform.right * moveDirection.x);
-        rb.MovePosition(rb.position + currentSpeed * Time.fixedDeltaTime * movement.normalized);
-
-        //Debug.Log(rb.position + currentSpeed * Time.fixedDeltaTime * movement.normalized);
-    }
     private void Place(Vector3 worldPos, Vector3 angle, bool vertical)
     {
 

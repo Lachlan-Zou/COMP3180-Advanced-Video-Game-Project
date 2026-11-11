@@ -40,8 +40,6 @@ public class EnemyMovement : MonoBehaviour
         mySceneManager = theSceneManager.GetComponent<MySceneManager>();
         myRenderer = GetComponent<Renderer>();
 
-        // Method A: Direct assignment (Creates a unique material instance clone)
-        RebuildNavMesh();
         target = GameObject.Find("Target");
 
         mazeGenerator = GameObject.Find("Maze Generator").GetComponent<MazeGenerator>();
@@ -52,6 +50,7 @@ public class EnemyMovement : MonoBehaviour
         agent.updateRotation = false;
 
         searchPoint = new Vector3((mazeWidth - 1) * cellSize, 0, (mazeDepth - 1) * cellSize);
+        EnterSearch();
     }
 
     void Update()
@@ -60,39 +59,28 @@ public class EnemyMovement : MonoBehaviour
         switch (currentState)
         {
             case State.Search:
-                myRenderer.material.color = Color.green;
-                agent.SetDestination(searchPoint);
-                GetComponent<NavMeshAgent>().speed = 3.5f;
+                if (!agent.pathPending && !agent.hasPath) // If the search point is invalid
+                {
+                    EnterSearch();
+                }
+
                 if (!agent.pathPending && agent.hasPath && agent.remainingDistance < 1f)
                 {
-                    searchPoint = GenerateRandomPoint();
+                    EnterSearch();
                 }
+
                 break;
             case State.Suspicion:
-                myRenderer.material.color = Color.yellow;
-
-                agent.SetDestination(pointofInterest);
                 if (!agent.pathPending && agent.hasPath && agent.remainingDistance < 1f)
                 {
-                    Debug.Log("Sometimes you bug out?");
-                    currentState = State.Search;
+                    EnterSearch();
                 }
-                // Debug.Log(agent.destination);
-                // Debug.Log(pointofInterest);
-
-                // Debug.Log("Path Pending: " + agent.pathPending);
-                // Debug.Log("Has Path: " + agent.hasPath);
-                // Debug.Log("Path Status: " + agent.pathStatus);
-                // Debug.Log("Remaining Distance: " + agent.remainingDistance);
                 break;
             case State.Chase:
-                myRenderer.material.color = Color.red;
-                agent.SetDestination(target.transform.position);
-                GetComponent<NavMeshAgent>().speed = 5f;
                 if (!foV.canSeePlayer)
                 {
                     pointofInterest = target.transform.position;
-                    currentState = State.Suspicion;
+                    InvestigatePoint(pointofInterest);
                 }
                 if (agent.remainingDistance < 1f)
                 {
@@ -103,8 +91,7 @@ public class EnemyMovement : MonoBehaviour
 
         if (foV.canSeePlayer)
         {
-            currentState = State.Chase;
-            //Time.timeScale = 0f;
+            EnterChase();
         }
         if (agent.velocity.sqrMagnitude > 0.01f)
         {
@@ -113,11 +100,8 @@ public class EnemyMovement : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * turnSpeed);
         }
         GenerateLine();
-    }
 
-    public void RebuildNavMesh()
-    {
-        navSurface.BuildNavMesh();
+        //Debug.Log(agent.remainingDistance);
     }
 
     public Vector3 GenerateRandomPoint()
@@ -134,14 +118,39 @@ public class EnemyMovement : MonoBehaviour
         return GenerateRandomPoint();
     }
 
+    public void EnterSearch()
+    {
+        searchPoint = GenerateRandomPoint();
+        currentState = State.Search;
+        myRenderer.material.color = Color.green;
+        agent.SetDestination(searchPoint);
+        GetComponent<NavMeshAgent>().speed = 3.5f;
+    }
     public void InvestigatePoint(Vector3 position)
     {
-        Debug.Log("we are investgating point.");
-        currentState = State.Suspicion;
-        pointofInterest = position;
-        //agent.SetDestination(pointofInterest);
-    }
+        NavMeshPath path = new NavMeshPath();
+        bool success = agent.CalculatePath(position, path); // is the path valid
 
+        if (success && path.status == NavMeshPathStatus.PathComplete)
+        {
+            currentState = State.Suspicion;
+            myRenderer.material.color = Color.yellow;
+
+            pointofInterest = position;
+
+            // You better not bug out on me anymore.
+            agent.ResetPath();
+
+            bool destinationSet = agent.SetDestination(pointofInterest);
+        }
+    }
+    public void EnterChase()
+    {
+        currentState = State.Chase;
+        myRenderer.material.color = Color.red;
+        agent.SetDestination(target.transform.position);
+        GetComponent<NavMeshAgent>().speed = 5f;
+    }
     public void GenerateLine()
     {
         if (agent.hasPath)

@@ -13,8 +13,6 @@ public class MySceneManager : MonoBehaviour
     public MazeGenerator mazeGenerator;
     public GameObject UICanvas;
     public CanvasInstance canvasInstance;
-    public List<string> recordedTimes = new List<string>();
-    public int started = 0;
     void Awake()
     {
         // If an instance already exists and it's not this one, destroy this copy
